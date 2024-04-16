@@ -1,5 +1,18 @@
 {
   "dependencies": {
+    "com.nighttraincode.nightpool": {
+      "version": "https://github.com/MeeXaSiK/NightPool.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "fb0218774b66a8e3d99505c5eefda3ff8b41ba2d"
+    },
+    "com.unity.2d.sprite": {
+      "version": "1.0.0",
+      "depth": 0,
+      "source": "builtin",
+      "dependencies": {}
+    },
     "com.unity.collab-proxy": {
       "version": "2.3.1",
       "depth": 0,
@@ -50,6 +63,13 @@
       "dependencies": {
         "com.unity.test-framework": "1.1.9"
       },
+      "url": "https://packages.unity.com"
+    },
+    "com.unity.nuget.newtonsoft-json": {
+      "version": "3.2.1",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {},
       "url": "https://packages.unity.com"
     },
     "com.unity.performance.profile-analyzer": {

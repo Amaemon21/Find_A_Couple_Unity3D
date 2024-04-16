@@ -4,16 +4,34 @@ using UnityEngine;
 
 public class Spawner : MonoBehaviour
 {
-    [SerializeField] private List<Animal> _animals = new();
+    [Space(10)]
+    [SerializeField] private TransportationController _controller;
+    [SerializeField] private CheckingAnimalFallen _checkingAnimalFallen;
+    [SerializeField] private Score _score;
 
-    [SerializeField] private float _maxSpawnedAnimals = 10;
+    [Space(10)]
+    [SerializeField] private Transform _spawnPosition;
+    [SerializeField] private float _offsetSpawnPosition;
 
-    private float _spawnedAnimal = 0;
+    [Space(10)]
+    [SerializeField] private float _startSpawnStep = 2f;
 
+    [Space(10)]
+    [SerializeField] private List<Animal> _animalPrefabs = new();
+
+    private List<GameObject> _spawnedAnimals = new();
+    private float _currentStep;
     private Transform _transform;
+    private bool _isWorking = true;
+
+    public void Restart()
+    {
+        StartCoroutine(RestartLevelRewarded());
+    }
 
     private void Awake()
     {
+        _currentStep = _startSpawnStep;
         _transform = transform;
 
         StartCoroutine(SpawnAnimals());
@@ -21,28 +39,44 @@ public class Spawner : MonoBehaviour
 
     private void InstantiateAnimal()
     {
-        int randAnimal = Random.Range(0, _animals.Count - 1);
+        int randAnimal = Random.Range(0, _animalPrefabs.Count);
+        float randPosition = Random.Range(-_offsetSpawnPosition, _offsetSpawnPosition);
+        Vector3 positionAnimal = new Vector3(randPosition, _spawnPosition.position.y, _spawnPosition.position.z);
 
-        Instantiate(_animals[randAnimal], _transform.position, _transform.rotation, _transform);
-        _spawnedAnimal++;
+        Animal animal = Instantiate(_animalPrefabs[randAnimal], positionAnimal, _transform.rotation, _transform);
+        _spawnedAnimals.Add(animal.gameObject);
+        animal.Init(_controller);
     }
 
     private IEnumerator SpawnAnimals()
     {
-        bool isWorking = true;
-
-        while (isWorking)
+        while (_isWorking)
         {
-            if (_spawnedAnimal < _maxSpawnedAnimals)
-            {
-                InstantiateAnimal();
-            }
-            else
-            {
-                isWorking = false;
-            }
-
-            yield return new WaitForSeconds(1f);
+            InstantiateAnimal();
+            yield return new WaitForSeconds(_currentStep);
         }
+    }
+
+    private IEnumerator RestartLevelRewarded()
+    {
+        foreach(var animal in _spawnedAnimals)
+        {
+            Destroy(animal);
+        }
+
+        _spawnedAnimals.Clear();
+        _score.RestartRewardGame();
+
+        yield return new WaitForSeconds(5f);
+        _isWorking = true;
+        StartCoroutine(SpawnAnimals());
+    }
+
+    private void OnEnable() => _checkingAnimalFallen.GameOverChanged += OnGameOverChanged;
+    private void OnDisable() => _checkingAnimalFallen.GameOverChanged -= OnGameOverChanged;
+    private void OnGameOverChanged()
+    {
+        StopCoroutine(SpawnAnimals());
+        _isWorking = false;
     }
 }
