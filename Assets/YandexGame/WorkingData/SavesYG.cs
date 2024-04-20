@@ -7,7 +7,7 @@ namespace YG
     {
         public int idSave;
         public bool isFirstSession = true;
-        public string language = "ru";
+        public string language = "en";
         public bool promptDone;
 
         public int money = 1;      

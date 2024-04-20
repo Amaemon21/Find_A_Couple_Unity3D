@@ -14,6 +14,12 @@ public class PlatformController : MonoBehaviour
     public event Action AddScoreChanged;
     public event Action DestoryChanged;
 
+    private void Awake()
+    {
+        _fistAnimal = null;
+        _secondAnimal = null;
+    }
+
     public void InitAnimal(Animal animal)
     {
         if (_fistAnimal == null) _fistAnimal = animal;

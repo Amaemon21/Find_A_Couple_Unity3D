@@ -4,10 +4,18 @@ using YG;
 
 public class RestartButton : Button_
 {
-    protected override void OnClickButton()
+    [SerializeField] private Animator _animator;
+    [SerializeField] private GameObject _popup;
+    
+    public void On—ompletion()
     {
-        Time.timeScale = 1;
+        _popup.SetActive(false);
         YandexGame.savesData.LastScore = 0;
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    protected override void OnClickButton()
+    {
+        _animator.SetTrigger("Hide");
     }
 }

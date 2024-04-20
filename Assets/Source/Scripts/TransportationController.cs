@@ -17,6 +17,12 @@ public class TransportationController : MonoBehaviour
 
     public event Action SoundChanged;
 
+    private void Awake()
+    {
+        IsFistEmpty = true;
+        IsFistEmpty = true;
+    }
+
     private void OnEnable()
     {
         _platformController.DestoryChanged += OnDestoryChanged;
@@ -37,12 +43,14 @@ public class TransportationController : MonoBehaviour
 
         if (IsFistEmpty)
         {
+            animal.transform.Rotate(0f, 90, 0f);
             animal.transform.position = _fistPlatform.position;
             animal.SetFist();
             IsFistEmpty = false;
         }
         else if (!IsFistEmpty && IsSecondEmpty)
         {
+            animal.transform.Rotate(0f, -90, 0f);
             animal.transform.position = _secondPlatform.position;
             animal.SetSecond();
             IsSecondEmpty = false;
@@ -56,16 +64,16 @@ public class TransportationController : MonoBehaviour
         if (IsFistEmpty && IsSecondEmpty)
             return;
 
-        animal.transform.Rotate(0f, 180, 0f);
-
         if (animal.IsFist)
         {
+            animal.transform.Rotate(0f, 90f, 0f);
             _platformController.ResetFist();
             animal.transform.position = _resetPosition.position;
             IsFistEmpty = true;
         }
         else if (!animal.IsFist)
         {
+            animal.transform.Rotate(0f, -90f, 0f);
             _platformController.ResetSecond();
             animal.transform.position = _resetPosition.position;
             IsSecondEmpty = true;
